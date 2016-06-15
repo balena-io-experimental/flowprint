@@ -21,7 +21,8 @@ COPY package.json package.json
 # making sure to clean up the artifacts it creates in order to reduce the image size.
 RUN JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/*
 
-#RUN pip install -r requirements.txt
+# pip install python deps from requirements.txt on the resin.io build server
+RUN pip install -r /requirements.txt
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
