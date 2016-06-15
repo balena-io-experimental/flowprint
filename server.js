@@ -33,7 +33,7 @@ session.flows( function(err, flows) {
     var date = moment(msg.sent).tz(timezone).format('h:mma');
     // console.log(date);
     if (msg.event == 'message') {
-      console.log(msg.content);
+      //console.log(msg.content);
       var tags = msg.content.match(/(@([A-Za-z]+[A-Za-z0-9]+))/g);
       if (tags) {
 	tags.forEach(function(tag) {
@@ -44,7 +44,7 @@ session.flows( function(err, flows) {
 	    var printtext = msg.content.replace(/[^\x00-\x7F]/g, "");
 	    printmsg(date, printtext);
 	    console.log(date);
-	    console.log(printmsg);
+	    console.log(printtext);
 	  }
 	});
       }
