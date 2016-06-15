@@ -1,13 +1,15 @@
-# base-image for node on any machine using a template variable,
-# see more about dockerfile templates here:http://docs.resin.io/pages/deployment/docker-templates
-# Note the node:slim image doesn't have node-gyp
-FROM resin/raspberrypi3-node:latest
+FROM resin/raspberrypi3-python:latest
 
-# use apt-get if you need to install dependencies,
-# for instance if you need ALSA sound utils, just uncomment the lines below.
-#RUN apt-get update && apt-get install -yq \
-#    alsa-utils libasound2-dev && \
-#    apt-get clean && rm -rf /var/lib/apt/lists/*
+### Add Node
+ENV NODE_VERSION 0.10.43
+
+RUN curl -SLO "http://resin-packages.s3.amazonaws.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-armv7hf.tar.gz" \
+	&& echo "216640224b7627bf8d549fbdd9d979e78e6df9efd89f178e722af9b202b2f28c  node-v0.10.43-linux-armv7hf.tar.gz" | sha256sum -c - \
+	&& tar -xzf "node-v$NODE_VERSION-linux-armv7hf.tar.gz" -C /usr/local --strip-components=1 \
+	&& rm "node-v$NODE_VERSION-linux-armv7hf.tar.gz" \
+	&& npm config set unsafe-perm true -g --unsafe-perm \
+	&& rm -rf /tmp/*
+#####
 
 # Defines our working directory in container
 WORKDIR /usr/src/app
@@ -18,6 +20,8 @@ COPY package.json package.json
 # This install npm dependencies on the resin.io build server,
 # making sure to clean up the artifacts it creates in order to reduce the image size.
 RUN JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/*
+
+RUN pip install -r requirements.txt
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
