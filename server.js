@@ -29,20 +29,21 @@ session.flows( function(err, flows) {
   });
   anotherStream = session.stream(flowIds);
   return anotherStream.on('message', function(msg) {
-    console.log('message from stream:', msg);
+    // console.log('message from stream:', msg);
     var date = moment(msg.sent).tz(timezone).format('h:mma');
-    console.log(date);
+    // console.log(date);
     if (msg.event == 'message') {
       console.log(msg.content);
       var tags = msg.content.match(/(@([A-Za-z]+[A-Za-z0-9]+))/g);
       if (tags) {
 	tags.forEach(function(tag) {
-	  console.log("Tag:"+tag);
+	  // console.log("Tag:"+tag);
 	  if ((tag === user) || (tag == '@team')) {
 	    console.log('HIT!!');
 	    // remove non-ASCII characters
 	    var printtext = msg.content.replace(/[^\x00-\x7F]/g, "");
-	    //printmsg(date, printtext);
+	    printmsg(date, printtext);
+	    console.log(date);
 	    console.log(printmsg);
 	  }
 	});
