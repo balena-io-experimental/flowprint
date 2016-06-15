@@ -7,6 +7,20 @@ var session = new Session(process.env.FLOWDOCK_KEY);
 var user = process.env.FLOWDOCK_USER,
     timezone = process.env.TIMEZONE;
 
+
+// do the thermal printer interfacing
+var printmsg = function(header, message) {
+    var options = {
+      mode: 'text',
+      args: [header, message]
+    };
+  PythonShell.run('message.py', options, function (err, results) {
+    if (err) throw err;
+    // results is an array consisting of messages collected during execution
+    console.log('results: %j', results);
+  });
+}
+
 // Start reading all the flows
 session.flows( function(err, flows) {
   var anotherStream, flowIds;
@@ -25,7 +39,11 @@ session.flows( function(err, flows) {
 	tags.forEach(function(tag) {
 	  console.log("Tag:"+tag);
 	  if ((tag === user) || (tag == '@team')) {
-	    console.log('HIT!!')
+	    console.log('HIT!!');
+	    // remove non-ASCII characters
+	    var printtext = msg.content.replace(/[^\x00-\x7F]/g, "");
+	    //printmsg(date, printtext);
+	    console.log(printmsg);
 	  }
 	});
       }
