@@ -8,6 +8,8 @@ message sent directly to you on [Flowdock](flowdock.com)
 * Raspberry Pi 3
 * ESC/POS compatible thermal printer
 
+![Printed note](img/message.jpg?raw=true "Ticket")
+
 ## Notes
 
 Get your Flowdock API key from "Account > API Tokens".
